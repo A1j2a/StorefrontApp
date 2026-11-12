@@ -1,97 +1,82 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# StorefrontApp — Multi-Store Shopify React Native Prototype
 
-# Getting Started
+A reusable React Native (TypeScript) shopping app prototype demonstrating how multiple Shopify stores can run on a **single shared codebase** using centralized store configuration, consistent variant/cart logic, persistent local bag storage, and isolated third-party adapters.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+> **Note:** Product catalog and reviews data in `src/data/mockCatalog.ts` are **labelled sample/mock data**. Production Shopify Storefront GraphQL operations are defined in `src/services/storefrontQueries.ts` and decoupled behind `src/services/shopifyService.ts` and `src/services/cartService.ts`.
 
-## Step 1: Start Metro
+---
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Project Structure (AuraCampus Conventions)
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+```text
+StorefrontApp/
+├── App.tsx                         # Root entry exporting src/index.tsx
+├── src/
+│   ├── index.tsx                   # SafeAreaProvider + StoreProvider + MainNavigation
+│   ├── types/index.ts              # Shared TypeScript interfaces
+│   ├── config/stores.ts            # Centralized Store A & Store B configurations
+│   ├── theme/                      # colors.ts, dimensions.ts (perfectSize), styles.ts
+│   ├── common/                     # asyncServices.ts (AsyncStorage), formatters.ts (cent-safe math)
+│   ├── data/mockCatalog.ts         # Labelled mock products & reviews
+│   ├── services/                   # storefrontQueries.ts, shopifyService.ts, cartService.ts, reviewsService.ts
+│   ├── context/StoreContext.tsx    # Store config switching, loading/error states, persisted cart
+│   ├── components/                 # PrimaryText, PrimaryButton, PrimaryLoader, AppHeader, ProductCard, ReviewsSection, ErrorRetryView
+│   ├── navigation/MainNavigation.tsx
+│   └── screens/                    # Welcome, Home, ProductDetails, Cart
+├── __tests__/                      # Jest unit & render tests
+└── docs/
+    ├── ARCHITECTURE_AND_INTEGRATION.md
+    └── SUBMISSION_AND_DEMO.md
+```
 
-```sh
-# Using npm
+---
+
+## Setup & Run Instructions
+
+### Prerequisites
+- Node.js `>= 22.11.0`
+- React Native CLI environment (Android SDK / Xcode + CocoaPods for native builds)
+
+### 1. Install Dependencies & Configure `.env`
+```bash
+npm install
+```
+
+Edit [.env](file:///Users/ajaypatidar/Desktop/StorefrontApp/.env) (copied from `.env.example`) to connect a live Shopify store whenever ready:
+```env
+USE_LIVE_SHOPIFY=true
+SHOPIFY_API_VERSION=2025-01
+STORE_A_DOMAIN=your-store.myshopify.com
+STORE_A_STOREFRONT_TOKEN=your_public_storefront_access_token
+```
+`metro.config.js` automatically runs `scripts/syncEnv.js` on startup to sync `.env` into `src/config/env.generated.ts` (you can also run `node scripts/syncEnv.js` manually). When `USE_LIVE_SHOPIFY=false` or tokens are empty, the app uses labelled sample data in `src/data/mockCatalog.ts`. When `USE_LIVE_SHOPIFY=true` and a Storefront token is set, `shopifyService` and `cartService` execute the dynamic GraphQL operations in `src/services/storefrontQueries.ts`.
+
+### 2. Run Verification Checks
+```bash
+npx tsc --noEmit
+npm run lint
+npm test -- --watchAll=false
+```
+
+### 3. Run on Android
+```bash
 npm start
-
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
+# In a second terminal:
 npm run android
-
-# OR using Yarn
-yarn android
 ```
 
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
+### 4. Run on iOS
+```bash
+# Install CocoaPods dependencies first if ios/Pods is not present:
+bundle install && bundle exec pod install --project-directory=ios
 npm run ios
-
-# OR using Yarn
-yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+---
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+## Switching Store Configurations Without Editing Screens
 
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+- **In-app switcher:** Tap the `Store A ⇄` / `Store B ⇄` pill in the top header or the selector cards on the Welcome screen.
+- **Default store config:** Change `DEFAULT_STORE_ID` in `src/config/stores.ts` between `'store-a'` and `'store-b'`.
+  - **Store A (`APEX ATHLETICS`)**: Black/white Gymshark-inspired sportswear theme, `reviews: true`, `loyalty: false`.
+  - **Store B (`MAISON ROSE`)**: Pink/white boutique fashion theme, `reviews: false`, `loyalty: true`.

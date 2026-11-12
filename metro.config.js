@@ -1,4 +1,8 @@
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const { syncEnv } = require('./scripts/syncEnv');
+
+// Keep src/config/env.generated.ts synced whenever Metro starts.
+syncEnv();
 
 /**
  * Metro configuration
