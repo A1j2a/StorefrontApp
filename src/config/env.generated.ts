@@ -9,4 +9,3 @@ export const GENERATED_ENV = {
   "REVIEWS_API_URL": "",
   "REVIEWS_API_KEY": ""
 } as const;
-
