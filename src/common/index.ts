@@ -9,4 +9,12 @@ export {
   calculateSubtotalCents,
   centsToAmount,
 } from './formatters';
+export {
+  DEFAULT_FILTER_STATE,
+  SORT_OPTIONS,
+  PRICE_FILTERS,
+  extractCategories,
+  countActiveFilters,
+  filterAndSortProducts,
+} from './filterSort';
 

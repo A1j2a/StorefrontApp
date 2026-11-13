@@ -1,15 +1,25 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import {
+  countActiveFilters,
+  DEFAULT_FILTER_STATE,
+  extractCategories,
+  filterAndSortProducts,
+} from '../../common';
+import {
   AppHeader,
+  CategoryFilterBar,
   ErrorRetryView,
+  FilterEmptyState,
+  FilterSortBar,
+  FilterSortModal,
   LoyaltyBanner,
   PrimaryLoader,
   PrimaryText,
   ProductCard,
 } from '../../components';
 import { useStore } from '../../context/StoreContext';
-import { Product } from '../../types';
+import { Product, ProductFilterState } from '../../types';
 import { styles } from './styles';
 
 interface HomeScreenProps {
@@ -17,6 +27,7 @@ interface HomeScreenProps {
   onOpenCart: () => void;
 }
 
+// Home collection screen with dynamic category filtering, sorting and responsive product grid
 const HomeScreen: FC<HomeScreenProps> = ({ onSelectProduct, onOpenCart }) => {
   const {
     storeConfig,
@@ -27,6 +38,43 @@ const HomeScreen: FC<HomeScreenProps> = ({ onSelectProduct, onOpenCart }) => {
     reloadProducts,
   } = useStore();
   const { theme, features } = storeConfig;
+
+  // Local filter and sort criteria state
+  const [filterState, setFilterState] =
+    useState<ProductFilterState>(DEFAULT_FILTER_STATE);
+
+  // Filter and sort bottom-sheet modal visibility
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  // Dynamically extract distinct categories from current catalog
+  const categories = useMemo(() => extractCategories(products), [products]);
+
+  // Compute filtered and sorted product list
+  const displayedProducts = useMemo(
+    () => filterAndSortProducts(products, filterState),
+    [products, filterState],
+  );
+
+  // Count active non-default filters for badge indicators
+  const activeFilterCount = useMemo(
+    () => countActiveFilters(filterState),
+    [filterState],
+  );
+
+  // Handle category chip selection
+  const handleSelectCategory = (category: string) => {
+    setFilterState(prev => ({ ...prev, category }));
+  };
+
+  // Reset all filters back to default
+  const handleResetFilters = () => {
+    setFilterState(DEFAULT_FILTER_STATE);
+  };
+
+  // Apply new filter and sort criteria from modal
+  const handleApplyFilters = (nextState: ProductFilterState) => {
+    setFilterState(nextState);
+  };
 
   const renderHeader = () => (
     <View style={styles.listHeader}>
@@ -52,6 +100,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ onSelectProduct, onOpenCart }) => {
         />
       )}
 
+      {/* Collection title bar with error retry test action */}
       <View style={styles.sectionBar}>
         <View>
           <PrimaryText style={styles.sectionHeading}>COLLECTION</PrimaryText>
@@ -75,6 +124,25 @@ const HomeScreen: FC<HomeScreenProps> = ({ onSelectProduct, onOpenCart }) => {
           </PrimaryText>
         </TouchableOpacity>
       </View>
+
+      {/* Dynamic horizontal category filter chips */}
+      <View style={styles.filterSection}>
+        <CategoryFilterBar
+          categories={categories}
+          selectedCategory={filterState.category}
+          onSelectCategory={handleSelectCategory}
+        />
+
+        {/* Filter and sort action bar */}
+        <FilterSortBar
+          totalResults={displayedProducts.length}
+          filterState={filterState}
+          activeFilterCount={activeFilterCount}
+          onOpenSort={() => setIsModalVisible(true)}
+          onOpenFilter={() => setIsModalVisible(true)}
+          onResetFilters={handleResetFilters}
+        />
+      </View>
     </View>
   );
 
@@ -91,11 +159,16 @@ const HomeScreen: FC<HomeScreenProps> = ({ onSelectProduct, onOpenCart }) => {
         />
       ) : (
         <FlatList
-          data={products}
+          data={displayedProducts}
           keyExtractor={item => item.id}
           numColumns={2}
           ListHeaderComponent={renderHeader}
-          columnWrapperStyle={styles.columnWrapper}
+          ListEmptyComponent={
+            <FilterEmptyState onReset={handleResetFilters} />
+          }
+          columnWrapperStyle={
+            displayedProducts.length > 0 ? styles.columnWrapper : undefined
+          }
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
@@ -105,6 +178,14 @@ const HomeScreen: FC<HomeScreenProps> = ({ onSelectProduct, onOpenCart }) => {
           )}
         />
       )}
+
+      {/* Filter and Sort bottom sheet modal */}
+      <FilterSortModal
+        visible={isModalVisible}
+        initialState={filterState}
+        onClose={() => setIsModalVisible(false)}
+        onApply={handleApplyFilters}
+      />
     </View>
   );
 };

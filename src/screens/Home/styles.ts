@@ -50,6 +50,10 @@ export const styles = StyleSheet.create({
     fontSize: perfectSize(11),
     marginTop: 2,
   },
+  filterSection: {
+    marginTop: perfectSize(10),
+    marginBottom: perfectSize(4),
+  },
   errorTestBtn: {
     borderWidth: 1,
     borderRadius: perfectSize(8),

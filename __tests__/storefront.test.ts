@@ -1,4 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  countActiveFilters,
+  DEFAULT_FILTER_STATE,
+  extractCategories,
+  filterAndSortProducts,
+} from '../src/common';
 import { ENV } from '../src/config/env';
 import { getStoreConfig } from '../src/config/stores';
 import { MOCK_PRODUCTS_BY_STORE } from '../src/data/mockCatalog';
@@ -160,5 +166,53 @@ describe('Storefront core business logic', () => {
         }),
       }),
     );
+  });
+
+  test('dynamically extracts categories and filters products', () => {
+    const productsA = MOCK_PRODUCTS_BY_STORE['store-a'];
+    const categories = extractCategories(productsA);
+
+    expect(categories[0]).toBe('All');
+    expect(categories).toContain('Tops');
+    expect(categories).toContain('Outerwear');
+
+    const filteredTops = filterAndSortProducts(productsA, {
+      ...DEFAULT_FILTER_STATE,
+      category: 'Tops',
+    });
+    expect(filteredTops.length).toBeGreaterThan(0);
+    expect(filteredTops.every(p => p.category === 'Tops')).toBe(true);
+  });
+
+  test('sorts products by price low-to-high and high-to-low', () => {
+    const productsA = MOCK_PRODUCTS_BY_STORE['store-a'];
+
+    const sortedAsc = filterAndSortProducts(productsA, {
+      ...DEFAULT_FILTER_STATE,
+      sortBy: 'price-low-high',
+    });
+    const minAsc = Math.min(...sortedAsc[0].variants.map(v => v.price));
+    const maxAsc = Math.min(...sortedAsc[sortedAsc.length - 1].variants.map(v => v.price));
+    expect(minAsc).toBeLessThanOrEqual(maxAsc);
+
+    const sortedDesc = filterAndSortProducts(productsA, {
+      ...DEFAULT_FILTER_STATE,
+      sortBy: 'price-high-low',
+    });
+    const firstDesc = Math.min(...sortedDesc[0].variants.map(v => v.price));
+    const lastDesc = Math.min(...sortedDesc[sortedDesc.length - 1].variants.map(v => v.price));
+    expect(firstDesc).toBeGreaterThanOrEqual(lastDesc);
+  });
+
+  test('calculates active filter counts correctly', () => {
+    expect(countActiveFilters(DEFAULT_FILTER_STATE)).toBe(0);
+
+    const activeState = {
+      category: 'Outerwear',
+      inStockOnly: true,
+      priceRange: '50-100' as const,
+      sortBy: 'price-low-high' as const,
+    };
+    expect(countActiveFilters(activeState)).toBe(4);
   });
 });

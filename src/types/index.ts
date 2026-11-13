@@ -101,3 +101,23 @@ export interface ReviewsResponse {
 
 export type ScreenName = 'Welcome' | 'Home' | 'ProductDetails' | 'Cart';
 
+// Supported sorting criteria for product catalog
+export type SortOption =
+  | 'featured'
+  | 'price-low-high'
+  | 'price-high-low'
+  | 'name-asc'
+  | 'name-desc';
+
+// Supported price range filter bands
+export type PriceFilter = 'all' | 'under-50' | '50-100' | 'over-100';
+
+// Unified product filter and sort state
+export interface ProductFilterState {
+  category: string;
+  inStockOnly: boolean;
+  priceRange: PriceFilter;
+  sortBy: SortOption;
+}
+
+

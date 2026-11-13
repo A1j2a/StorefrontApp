@@ -13,6 +13,10 @@ import CartItemCard from './CartItemCard';
 import CartEmptyState from './CartEmptyState';
 import CartSummaryFooter from './CartSummaryFooter';
 import CheckoutModal from './CheckoutModal';
+import CategoryFilterBar from './CategoryFilterBar';
+import FilterSortBar from './FilterSortBar';
+import FilterSortModal from './FilterSortModal';
+import FilterEmptyState from './FilterEmptyState';
 
 export {
   PrimaryText,
@@ -30,4 +34,8 @@ export {
   CartEmptyState,
   CartSummaryFooter,
   CheckoutModal,
+  CategoryFilterBar,
+  FilterSortBar,
+  FilterSortModal,
+  FilterEmptyState,
 };
