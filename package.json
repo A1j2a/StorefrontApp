@@ -12,6 +12,7 @@
     "check": "npm run typecheck && npm run lint && npm test -- --watchAll=false",
     "pod:install": "cd ios && pod install",
     "clean:gradle": "pkill -f 'gradle' 2>/dev/null || true; cd android && rm -f .gradle/noVersion/buildLogic.lock && ./gradlew --stop",
+    "clean:android": "npm run clean:gradle; rm -rf node_modules/@react-native-async-storage/async-storage/android/build && cd android && ./gradlew clean",
     "build:android:debug": "cd android && ./gradlew assembleDebug",
     "build:android:release": "cd android && ./gradlew assembleRelease",
     "build:android:bundle": "cd android && ./gradlew bundleRelease",
