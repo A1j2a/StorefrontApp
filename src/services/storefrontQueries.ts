@@ -4,11 +4,7 @@
  * Automatically executed when USE_LIVE_SHOPIFY=true and a token is provided.
  */
 
-/**
- * Reusable Cart Fragment
- * Purpose: Cart ke common fields (id, checkoutUrl, totalQuantity, subtotal/total cost, aur line items with product variants)
- * ko reuse karne ke liye taki sabhi cart queries/mutations me consistent data structure mile.
- */
+// Reusable cart fields fragment (id, checkoutUrl, line items, and totals)
 const CART_FRAGMENT = /* GraphQL */ `
   fragment CartFields on Cart {
     id
@@ -56,11 +52,7 @@ const CART_FRAGMENT = /* GraphQL */ `
   }
 `;
 
-/**
- * Get Products Query (Home / Collection Listing)
- * Purpose: Storefront ke products ki list fetch karne ke liye (supports limit/pagination aur optional search query).
- * Isse product title, featured image, price, tags, aur variants ki stock availability milti hai.
- */
+// Fetches product catalog for collection and home screens
 export const GET_PRODUCTS_QUERY = /* GraphQL */ `
   query GetProducts($first: Int = 20, $query: String) {
     products(first: $first, query: $query) {
@@ -100,11 +92,7 @@ export const GET_PRODUCTS_QUERY = /* GraphQL */ `
   }
 `;
 
-/**
- * Get Product By Handle Query (Product Details Screen)
- * Purpose: Kisi specific product ka full detail fetch karne ke liye (using unique URL handle).
- * Isme full description, images, size/color options aur sabhi variants ka live availability & price fetch hota hai.
- */
+// Fetches full product details and variant stock by handle
 export const GET_PRODUCT_BY_HANDLE_QUERY = /* GraphQL */ `
   query GetProductByHandle($handle: String!) {
     productByHandle(handle: $handle) {
@@ -140,11 +128,7 @@ export const GET_PRODUCT_BY_HANDLE_QUERY = /* GraphQL */ `
   }
 `;
 
-/**
- * Cart Create Mutation
- * Purpose: User jab pehli baar item cart me add karta hai tab naya Shopify Cart session create karta hai.
- * Response me cart ID aur live Shopify web checkoutUrl return karta hai.
- */
+// Creates a new Shopify cart session with initial line items
 export const CART_CREATE_MUTATION = /* GraphQL */ `
   ${CART_FRAGMENT}
   mutation CartCreate($lines: [CartLineInput!]) {
@@ -160,11 +144,7 @@ export const CART_CREATE_MUTATION = /* GraphQL */ `
   }
 `;
 
-/**
- * Cart Lines Add Mutation
- * Purpose: Existing Shopify Cart session me aur products / variants add karne ke liye.
- * Agar same variant already cart me hai toh quantity automatically update hoti hai.
- */
+// Adds new product variants to an existing cart session
 export const CART_LINES_ADD_MUTATION = /* GraphQL */ `
   ${CART_FRAGMENT}
   mutation CartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
@@ -180,10 +160,7 @@ export const CART_LINES_ADD_MUTATION = /* GraphQL */ `
   }
 `;
 
-/**
- * Cart Lines Update Mutation
- * Purpose: Cart screen par kisi line item ki quantity ko increase ya decrease (+ / -) karne ke liye.
- */
+// Updates item quantities (+ / -) in the cart
 export const CART_LINES_UPDATE_MUTATION = /* GraphQL */ `
   ${CART_FRAGMENT}
   mutation CartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
@@ -199,10 +176,7 @@ export const CART_LINES_UPDATE_MUTATION = /* GraphQL */ `
   }
 `;
 
-/**
- * Cart Lines Remove Mutation
- * Purpose: Cart screen par "Remove" click karne par kisi specific item ko cart se completely delete karne ke liye.
- */
+// Removes specific line items from the cart
 export const CART_LINES_REMOVE_MUTATION = /* GraphQL */ `
   ${CART_FRAGMENT}
   mutation CartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
@@ -218,10 +192,7 @@ export const CART_LINES_REMOVE_MUTATION = /* GraphQL */ `
   }
 `;
 
-/**
- * Get Cart Query
- * Purpose: Saved cart ID se current cart state, line items, updated cost, aur checkoutUrl fetch karne ke liye (e.g. app restart ya pull-to-refresh par).
- */
+// Fetches current cart contents, totals, and checkout URL by cart ID
 export const GET_CART_QUERY = /* GraphQL */ `
   ${CART_FRAGMENT}
   query GetCart($cartId: ID!) {
