@@ -74,6 +74,48 @@ npm run ios
 
 ---
 
+## Build Commands
+
+Preconfigured build scripts in `package.json`:
+
+### Android Builds
+```bash
+# 1. Clean stuck Gradle lock or daemons (if any lock timeout occurs):
+npm run clean:gradle
+
+# 2. Build Debug APK:
+npm run build:android:debug
+# Output: android/app/build/outputs/apk/debug/app-debug.apk
+
+# 3. Build Release APK:
+npm run build:android:release
+# Output: android/app/build/outputs/apk/release/app-release.apk
+
+# 4. Build Production Release Bundle (AAB for Google Play):
+npm run build:android:bundle
+# Output: android/app/build/outputs/bundle/release/app-release.aab
+```
+
+### iOS Builds
+```bash
+# 1. Install CocoaPods:
+npm run pod:install
+
+# 2. Build Debug Scheme for iOS Simulator:
+npm run build:ios:debug
+
+# 3. Build Release Scheme for Generic iOS Device:
+npm run build:ios:release
+```
+
+### Validation & Verification
+```bash
+# Run TypeScript, ESLint, and Jest unit tests in one pipeline:
+npm run check
+```
+
+---
+
 ## Switching Store Configurations Without Editing Screens
 
 - **In-app switcher:** Tap the `Store A ⇄` / `Store B ⇄` pill in the top header or the selector cards on the Welcome screen.
