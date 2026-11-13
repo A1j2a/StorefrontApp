@@ -73,8 +73,12 @@ const VariantSelector: FC<VariantSelectorProps> = ({
                   },
                 ]}>
                 {available
-                  ? formatPrice(variant.price, currencySymbol)
-                  : 'Unavailable'}
+                  ? `${formatPrice(variant.price, currencySymbol)}${
+                      variant.quantityAvailable > 0 && variant.quantityAvailable <= 3
+                        ? ` • ${variant.quantityAvailable} left`
+                        : ''
+                    }`
+                  : 'Out of Stock (0)'}
               </PrimaryText>
             </TouchableOpacity>
           );

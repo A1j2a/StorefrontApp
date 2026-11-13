@@ -53,6 +53,15 @@ export const styles = StyleSheet.create({
     paddingHorizontal: perfectSize(11),
     paddingVertical: perfectSize(6),
   },
+  disabledStepBtn: {
+    opacity: 0.3,
+  },
+  stockNotice: {
+    fontSize: perfectSize(10),
+    fontWeight: '700',
+    color: '#D97706',
+    marginTop: perfectSize(2),
+  },
   stepSymbol: {
     fontSize: perfectSize(16),
     fontWeight: '800',

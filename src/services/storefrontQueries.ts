@@ -30,6 +30,7 @@ const CART_FRAGMENT = /* GraphQL */ `
               id
               title
               availableForSale
+              quantityAvailable
               price {
                 amount
                 currencyCode
@@ -75,6 +76,7 @@ export const GET_PRODUCTS_QUERY = /* GraphQL */ `
                 title
                 sku
                 availableForSale
+                quantityAvailable
                 price {
                   amount
                   currencyCode
@@ -113,6 +115,7 @@ export const GET_PRODUCT_BY_HANDLE_QUERY = /* GraphQL */ `
             title
             sku
             availableForSale
+            quantityAvailable
             price {
               amount
               currencyCode

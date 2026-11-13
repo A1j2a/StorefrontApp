@@ -11,6 +11,19 @@ export const styles = StyleSheet.create({
     fontSize: perfectSize(12),
     fontWeight: '600',
   },
+  stockWarningNotice: {
+    borderRadius: perfectSize(8),
+    padding: perfectSize(10),
+    marginBottom: perfectSize(12),
+    backgroundColor: '#FEF3C7',
+    borderWidth: 1,
+    borderColor: '#FCD34D',
+  },
+  stockWarningText: {
+    fontSize: perfectSize(12),
+    fontWeight: '700',
+    color: '#92400E',
+  },
   addBtn: {
     marginTop: perfectSize(4),
   },

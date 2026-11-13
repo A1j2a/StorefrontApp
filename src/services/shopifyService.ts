@@ -31,6 +31,7 @@ interface ShopifyProductEdgeNode {
         title: string;
         sku?: string | null;
         availableForSale: boolean;
+        quantityAvailable?: number | null;
         price: { amount: string };
         selectedOptions?: Array<{ name: string; value: string }>;
       };
@@ -72,6 +73,12 @@ const mapShopifyProduct = (
         color: colorOpt ?? 'Standard',
         price: Number.parseFloat(v.price.amount) || 0,
         availableForSale: Boolean(v.availableForSale),
+        quantityAvailable:
+          typeof v.quantityAvailable === 'number'
+            ? v.quantityAvailable
+            : v.availableForSale
+              ? 5
+              : 0,
         sku: v.sku || v.id.split('/').pop() || 'SKU',
       };
     },

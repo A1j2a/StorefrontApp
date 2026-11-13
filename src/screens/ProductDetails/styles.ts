@@ -31,6 +31,24 @@ export const styles = StyleSheet.create({
     paddingVertical: perfectSize(4),
     borderRadius: perfectSize(12),
   },
+  stockPillSuccess: {
+    backgroundColor: '#DCFCE7',
+  },
+  stockPillWarning: {
+    backgroundColor: '#FEF3C7',
+  },
+  stockPillDanger: {
+    backgroundColor: '#FEE2E2',
+  },
+  stockTextSuccess: {
+    color: '#16A34A',
+  },
+  stockTextWarning: {
+    color: '#D97706',
+  },
+  stockTextDanger: {
+    color: '#DC2626',
+  },
   stockPillText: {
     fontSize: perfectSize(11),
     fontWeight: '700',

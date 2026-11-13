@@ -12,7 +12,7 @@ import {
   VariantSelector,
 } from '../../components';
 import { useStore } from '../../context/StoreContext';
-import { colors, perfectSize } from '../../theme';
+import { perfectSize } from '../../theme';
 import { Product, ProductVariant } from '../../types';
 import { styles } from './styles';
 
@@ -28,7 +28,7 @@ const ProductDetailsScreen: FC<ProductDetailsScreenProps> = ({
   onOpenCart,
 }) => {
   const insets = useSafeAreaInsets();
-  const { storeConfig, addToCart } = useStore();
+  const { storeConfig, cartItems, addToCart } = useStore();
   const { theme, currencySymbol, features } = storeConfig;
 
   const [selectedVariantId, setSelectedVariantId] = useState<string>(
@@ -49,7 +49,19 @@ const ProductDetailsScreen: FC<ProductDetailsScreenProps> = ({
     product.variants.find(v => v.id === selectedVariantId) ??
     product.variants[0];
 
-  const isAvailable = Boolean(selectedVariant?.availableForSale);
+  const currentCartItem = cartItems.find(
+    i => i.variantId === selectedVariant?.id,
+  );
+  const currentCartQuantity = currentCartItem?.quantity ?? 0;
+
+  const maxStock =
+    typeof selectedVariant?.quantityAvailable === 'number'
+      ? selectedVariant.quantityAvailable
+      : selectedVariant?.availableForSale
+        ? 10
+        : 0;
+
+  const isAvailable = Boolean(selectedVariant?.availableForSale) && maxStock > 0;
 
   const handleSelectVariant = (variant: ProductVariant) => {
     setSelectedVariantId(variant.id);
@@ -94,18 +106,26 @@ const ProductDetailsScreen: FC<ProductDetailsScreenProps> = ({
             <View
               style={[
                 styles.stockPill,
-                {
-                  backgroundColor: isAvailable
-                    ? colors.successBg
-                    : colors.dangerBg,
-                },
+                !isAvailable
+                  ? styles.stockPillDanger
+                  : maxStock <= 3
+                    ? styles.stockPillWarning
+                    : styles.stockPillSuccess,
               ]}>
               <PrimaryText
                 style={[
                   styles.stockPillText,
-                  { color: isAvailable ? colors.success : colors.danger },
+                  !isAvailable
+                    ? styles.stockTextDanger
+                    : maxStock <= 3
+                      ? styles.stockTextWarning
+                      : styles.stockTextSuccess,
                 ]}>
-                {isAvailable ? 'In Stock' : 'Out of Stock'}
+                {!isAvailable
+                  ? 'Out of Stock (0)'
+                  : maxStock <= 3
+                    ? `Only ${maxStock} left!`
+                    : `In Stock (${maxStock} available)`}
               </PrimaryText>
             </View>
           </View>
@@ -137,6 +157,7 @@ const ProductDetailsScreen: FC<ProductDetailsScreenProps> = ({
 
           <AddToCartBar
             selectedVariant={selectedVariant}
+            cartQuantity={currentCartQuantity}
             addedFeedback={addedFeedback}
             onAddToCart={handleAddToCart}
             onOpenCart={onOpenCart}

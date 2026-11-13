@@ -46,6 +46,7 @@ export interface ProductVariant {
   color: string;
   price: number;
   availableForSale: boolean;
+  quantityAvailable: number;
   sku: string;
 }
 
@@ -70,6 +71,7 @@ export interface CartItem {
   variantTitle: string;
   price: number;
   quantity: number;
+  quantityAvailable: number;
   imageUrl: string;
 }
 

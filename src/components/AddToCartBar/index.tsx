@@ -9,6 +9,7 @@ import { styles } from './styles';
 
 interface AddToCartBarProps {
   selectedVariant?: ProductVariant;
+  cartQuantity?: number;
   addedFeedback: boolean;
   onAddToCart: () => void;
   onOpenCart: () => void;
@@ -16,13 +17,30 @@ interface AddToCartBarProps {
 
 const AddToCartBar: FC<AddToCartBarProps> = ({
   selectedVariant,
+  cartQuantity = 0,
   addedFeedback,
   onAddToCart,
   onOpenCart,
 }) => {
   const { storeConfig } = useStore();
   const { theme } = storeConfig;
-  const isAvailable = Boolean(selectedVariant?.availableForSale);
+
+  const maxStock =
+    typeof selectedVariant?.quantityAvailable === 'number'
+      ? selectedVariant.quantityAvailable
+      : selectedVariant?.availableForSale
+        ? 10
+        : 0;
+
+  const isAvailable = Boolean(selectedVariant?.availableForSale) && maxStock > 0;
+  const isMaxReached = isAvailable && cartQuantity >= maxStock;
+  const isButtonDisabled = !isAvailable || isMaxReached;
+
+  const buttonLabel = !isAvailable
+    ? 'UNAVAILABLE — OUT OF STOCK'
+    : isMaxReached
+      ? `MAX QUANTITY IN BAG (${cartQuantity})`
+      : 'ADD TO BAG';
 
   return (
     <View>
@@ -40,9 +58,17 @@ const AddToCartBar: FC<AddToCartBarProps> = ({
         </View>
       )}
 
+      {isMaxReached && (
+        <View style={styles.stockWarningNotice}>
+          <PrimaryText style={styles.stockWarningText}>
+            You already have all {maxStock} available item(s) in your bag.
+          </PrimaryText>
+        </View>
+      )}
+
       <PrimaryButton
-        label={isAvailable ? 'ADD TO BAG' : 'UNAVAILABLE — OUT OF STOCK'}
-        disabled={!isAvailable}
+        label={buttonLabel}
+        disabled={isButtonDisabled}
         onPress={onAddToCart}
         style={styles.addBtn}
       />

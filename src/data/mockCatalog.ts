@@ -25,6 +25,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Onyx Black',
           price: 38.0,
           availableForSale: true,
+          quantityAvailable: 6,
           sku: 'APX-TEE-BLK-S',
         },
         {
@@ -34,6 +35,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Onyx Black',
           price: 38.0,
           availableForSale: true,
+          quantityAvailable: 2,
           sku: 'APX-TEE-BLK-M',
         },
         {
@@ -43,6 +45,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Onyx Black',
           price: 38.0,
           availableForSale: false,
+          quantityAvailable: 0,
           sku: 'APX-TEE-BLK-L',
         },
         {
@@ -52,6 +55,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Steel Grey',
           price: 40.0,
           availableForSale: true,
+          quantityAvailable: 8,
           sku: 'APX-TEE-GRY-M',
         },
       ],
@@ -75,6 +79,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Obsidian',
           price: 46.0,
           availableForSale: true,
+          quantityAvailable: 5,
           sku: 'STR-SHT-OBS-S',
         },
         {
@@ -84,6 +89,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Obsidian',
           price: 46.0,
           availableForSale: false,
+          quantityAvailable: 0,
           sku: 'STR-SHT-OBS-M',
         },
         {
@@ -93,6 +99,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Chalk',
           price: 48.0,
           availableForSale: true,
+          quantityAvailable: 3,
           sku: 'STR-SHT-CHK-L',
         },
       ],
@@ -115,6 +122,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Jet Black',
           price: 68.0,
           availableForSale: true,
+          quantityAvailable: 7,
           sku: 'CRS-HOD-BLK-M',
         },
         {
@@ -124,6 +132,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Jet Black',
           price: 72.0,
           availableForSale: true,
+          quantityAvailable: 4,
           sku: 'CRS-HOD-BLK-XL',
         },
         {
@@ -133,6 +142,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Ash',
           price: 68.0,
           availableForSale: false,
+          quantityAvailable: 0,
           sku: 'CRS-HOD-ASH-S',
         },
       ],
@@ -156,6 +166,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Carbon',
           price: 58.0,
           availableForSale: true,
+          quantityAvailable: 5,
           sku: 'SCP-LEG-CRB-XS',
         },
         {
@@ -165,6 +176,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Carbon',
           price: 58.0,
           availableForSale: true,
+          quantityAvailable: 2,
           sku: 'SCP-LEG-CRB-S',
         },
         {
@@ -174,6 +186,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Carbon',
           price: 58.0,
           availableForSale: false,
+          quantityAvailable: 0,
           sku: 'SCP-LEG-CRB-M',
         },
       ],
@@ -199,6 +212,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Petal Pink',
           price: 118.0,
           availableForSale: true,
+          quantityAvailable: 4,
           sku: 'MRS-DRS-PNK-XS',
         },
         {
@@ -208,6 +222,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Petal Pink',
           price: 118.0,
           availableForSale: true,
+          quantityAvailable: 1,
           sku: 'MRS-DRS-PNK-S',
         },
         {
@@ -217,6 +232,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Petal Pink',
           price: 118.0,
           availableForSale: false,
+          quantityAvailable: 0,
           sku: 'MRS-DRS-PNK-M',
         },
       ],
@@ -240,6 +256,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Blush Cream',
           price: 84.0,
           availableForSale: true,
+          quantityAvailable: 6,
           sku: 'MRS-KNT-BLS-S',
         },
         {
@@ -249,6 +266,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Blush Cream',
           price: 84.0,
           availableForSale: false,
+          quantityAvailable: 0,
           sku: 'MRS-KNT-BLS-M',
         },
         {
@@ -258,6 +276,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Rosewood',
           price: 88.0,
           availableForSale: true,
+          quantityAvailable: 5,
           sku: 'MRS-KNT-RSW-L',
         },
       ],
@@ -280,6 +299,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Ivory',
           price: 145.0,
           availableForSale: true,
+          quantityAvailable: 3,
           sku: 'MRS-BLZ-IVR-S',
         },
         {
@@ -289,6 +309,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Ivory',
           price: 145.0,
           availableForSale: true,
+          quantityAvailable: 5,
           sku: 'MRS-BLZ-IVR-M',
         },
         {
@@ -298,6 +319,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Dusty Rose',
           price: 150.0,
           availableForSale: false,
+          quantityAvailable: 0,
           sku: 'MRS-BLZ-DRS-L',
         },
       ],
@@ -321,6 +343,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Fuchsia',
           price: 96.0,
           availableForSale: true,
+          quantityAvailable: 2,
           sku: 'MRS-BAG-FCH-OS',
         },
         {
@@ -330,6 +353,7 @@ export const MOCK_PRODUCTS_BY_STORE: Record<StoreId, Product[]> = {
           color: 'Champagne',
           price: 96.0,
           availableForSale: false,
+          quantityAvailable: 0,
           sku: 'MRS-BAG-CMP-OS',
         },
       ],

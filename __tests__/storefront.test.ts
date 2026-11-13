@@ -50,6 +50,33 @@ describe('Storefront core business logic', () => {
     expect(totals.subtotal).toBe(Number((availableVariant.price * 3).toFixed(2)));
   });
 
+  test('enforces available quantity limits when adding and updating items', () => {
+    const product = MOCK_PRODUCTS_BY_STORE['store-a'][0];
+    // Find variant with limited stock, e.g. quantityAvailable = 2
+    const lowStockVariant = product.variants.find(
+      v => v.availableForSale && v.quantityAvailable === 2,
+    )!;
+
+    expect(lowStockVariant).toBeDefined();
+
+    // 1. Add first item
+    let cart = cartService.addItem([], product, lowStockVariant);
+    expect(cart[0].quantity).toBe(1);
+
+    // 2. Add second item (reaches max stock of 2)
+    cart = cartService.addItem(cart, product, lowStockVariant);
+    expect(cart[0].quantity).toBe(2);
+
+    // 3. Attempting to add 3rd item when stock is 2 must throw error
+    expect(() => cartService.addItem(cart, product, lowStockVariant)).toThrow(
+      'Only 2 item(s) available in stock',
+    );
+
+    // 4. Updating quantity beyond available stock clamps to max available stock
+    const clampedCart = cartService.updateQuantity(cart, lowStockVariant.id, 99);
+    expect(clampedCart[0].quantity).toBe(2);
+  });
+
   test('persists and restores cart across app restarts per store', async () => {
     const product = MOCK_PRODUCTS_BY_STORE['store-b'][0];
     const variant = product.variants.find(v => v.availableForSale)!;

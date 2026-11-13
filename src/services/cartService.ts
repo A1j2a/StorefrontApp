@@ -39,6 +39,8 @@ interface ShopifyCartNode {
         merchandise: {
           id: string;
           title: string;
+          availableForSale?: boolean;
+          quantityAvailable?: number | null;
           price: { amount: string };
           image?: { url?: string } | null;
           product: {
@@ -83,6 +85,10 @@ const mapShopifyCart = (
     variantTitle: node.merchandise.title,
     price: Number.parseFloat(node.merchandise.price.amount) || 0,
     quantity: node.quantity,
+    quantityAvailable:
+      typeof node.merchandise.quantityAvailable === 'number'
+        ? node.merchandise.quantityAvailable
+        : 10,
     imageUrl:
       node.merchandise.image?.url ||
       node.merchandise.product.featuredImage?.url ||
@@ -139,7 +145,14 @@ export const cartService = {
     product: Product,
     variant: ProductVariant,
   ): CartItem[] {
-    if (!variant.availableForSale) {
+    const maxStock =
+      typeof variant.quantityAvailable === 'number'
+        ? variant.quantityAvailable
+        : variant.availableForSale
+          ? 10
+          : 0;
+
+    if (!variant.availableForSale || maxStock <= 0) {
       throw new Error('Selected variant is out of stock and cannot be added.');
     }
 
@@ -148,12 +161,19 @@ export const cartService = {
     );
 
     if (existingIndex >= 0) {
+      const existing = currentItems[existingIndex];
+      if (existing.quantity >= maxStock) {
+        throw new Error(
+          `Cannot add more. Only ${maxStock} item(s) available in stock.`,
+        );
+      }
       return currentItems.map((item, idx) =>
         idx === existingIndex
           ? {
               ...item,
               price: variant.price,
               quantity: item.quantity + 1,
+              quantityAvailable: maxStock,
             }
           : item,
       );
@@ -168,6 +188,7 @@ export const cartService = {
       variantTitle: variant.title,
       price: variant.price,
       quantity: 1,
+      quantityAvailable: maxStock,
       imageUrl: product.imageUrl,
     };
 
@@ -183,9 +204,17 @@ export const cartService = {
       return this.removeItem(currentItems, variantId);
     }
 
-    return currentItems.map(item =>
-      item.variantId === variantId ? { ...item, quantity: nextQuantity } : item,
-    );
+    return currentItems.map(item => {
+      if (item.variantId !== variantId) {
+        return item;
+      }
+      const maxStock =
+        typeof item.quantityAvailable === 'number' && item.quantityAvailable > 0
+          ? item.quantityAvailable
+          : 99;
+      const clampedQty = Math.min(nextQuantity, maxStock);
+      return { ...item, quantity: clampedQty };
+    });
   },
 
   removeItem(currentItems: CartItem[], variantId: string): CartItem[] {

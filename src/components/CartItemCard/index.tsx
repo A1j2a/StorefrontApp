@@ -30,6 +30,9 @@ const CartItemCard: FC<CartItemCardProps> = ({
     calculateSubtotalCents(item.price, item.quantity),
   );
 
+  const maxAvailable = item.quantityAvailable > 0 ? item.quantityAvailable : 99;
+  const isMaxReached = item.quantity >= maxAvailable;
+
   return (
     <View
       style={[
@@ -63,6 +66,16 @@ const CartItemCard: FC<CartItemCardProps> = ({
           {item.variantTitle}
         </PrimaryText>
 
+        {isMaxReached ? (
+          <PrimaryText style={styles.stockNotice}>
+            Max available stock reached ({maxAvailable})
+          </PrimaryText>
+        ) : maxAvailable <= 3 ? (
+          <PrimaryText style={styles.stockNotice}>
+            Only {maxAvailable} left in stock
+          </PrimaryText>
+        ) : null}
+
         <View style={styles.itemBottomRow}>
           <View
             style={[
@@ -83,7 +96,8 @@ const CartItemCard: FC<CartItemCardProps> = ({
 
             <TouchableOpacity
               onPress={() => onUpdateQuantity(item.variantId, item.quantity + 1)}
-              style={styles.stepBtn}
+              disabled={isMaxReached}
+              style={[styles.stepBtn, isMaxReached && styles.disabledStepBtn]}
               accessibilityLabel="Increase quantity">
               <PrimaryText style={styles.stepSymbol}>+</PrimaryText>
             </TouchableOpacity>
