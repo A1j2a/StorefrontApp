@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { AppIcon } from '../../assets';
 import { PrimaryButton, PrimaryText } from '../../components';
 import { STORE_LIST } from '../../config/stores';
 import { useStore } from '../../context/StoreContext';
@@ -53,11 +54,13 @@ const WelcomeScreen: FC<WelcomeScreenProps> = ({ onContinue }) => {
             { backgroundColor: theme.primaryColor },
           ]}>
           <View
-            style={[styles.logoMonogram, { borderColor: theme.onPrimaryColor }]}>
-            <PrimaryText
-              style={[styles.logoMonogramText, { color: theme.onPrimaryColor }]}>
-              {storeConfig.logoText.slice(0, 2)}
-            </PrimaryText>
+            style={[styles.logoContainer, { borderColor: theme.onPrimaryColor }]}>
+            <Image
+              source={AppIcon}
+              style={styles.heroLogo}
+              resizeMode="cover"
+              accessibilityLabel="Brand Icon"
+            />
           </View>
 
           <PrimaryText

@@ -187,3 +187,4 @@ flowchart TD
 - **Navigation**: Lightweight pure-React navigation stack (or `@react-navigation/native-stack`) for predictable, zero-dependency routing.
 - **Whitelabel CI/CD**: Fastlane + GitHub Actions / EAS Build for automated Android AAB and iOS IPA generation.
 - **Error & Performance Monitoring**: Sentry React Native SDK tagged by `storeId` and `storefrontApiVersion`.
+

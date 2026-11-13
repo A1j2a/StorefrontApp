@@ -34,13 +34,13 @@ export const styles = StyleSheet.create({
     width: perfectSize(34),
     height: perfectSize(34),
     borderRadius: perfectSize(8),
+    overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  brandMarkText: {
-    fontSize: perfectSize(12),
-    fontWeight: '900',
-    letterSpacing: 0.8,
+  brandIcon: {
+    width: '100%',
+    height: '100%',
   },
   titleBlock: {
     flex: 1,

@@ -39,19 +39,19 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: perfectSize(24),
   },
-  logoMonogram: {
-    width: perfectSize(68),
-    height: perfectSize(68),
-    borderRadius: perfectSize(34),
+  logoContainer: {
+    width: perfectSize(72),
+    height: perfectSize(72),
+    borderRadius: perfectSize(20),
     borderWidth: 2,
+    overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: perfectSize(16),
   },
-  logoMonogramText: {
-    fontSize: perfectSize(24),
-    fontWeight: '900',
-    letterSpacing: 1.5,
+  heroLogo: {
+    width: '100%',
+    height: '100%',
   },
   storeName: {
     fontSize: perfectSize(24),

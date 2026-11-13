@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Image, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { AppIcon } from '../../assets';
 import { useStore } from '../../context/StoreContext';
 import { perfectSize } from '../../theme';
 import PrimaryText from '../PrimaryText';
@@ -52,10 +53,12 @@ const AppHeader: FC<AppHeaderProps> = ({
           ) : (
             <View
               style={[styles.brandMark, { backgroundColor: theme.primaryColor }]}>
-              <PrimaryText
-                style={[styles.brandMarkText, { color: theme.onPrimaryColor }]}>
-                {storeConfig.logoText.slice(0, 2)}
-              </PrimaryText>
+              <Image
+                source={AppIcon}
+                style={styles.brandIcon}
+                resizeMode="cover"
+                accessibilityLabel="Store Logo"
+              />
             </View>
           )}
 

@@ -5,11 +5,13 @@ import {
   CartScreen,
   HomeScreen,
   ProductDetailsScreen,
+  SplashScreen,
   WelcomeScreen,
 } from '../screens';
 import { Product } from '../types';
 
 type Route =
+  | { name: 'Splash' }
   | { name: 'Welcome' }
   | { name: 'Home' }
   | { name: 'ProductDetails'; product: Product }
@@ -17,12 +19,16 @@ type Route =
 
 export const MainNavigation: FC = () => {
   const { products } = useStore();
-  const [stack, setStack] = useState<Route[]>([{ name: 'Welcome' }]);
+  const [stack, setStack] = useState<Route[]>([{ name: 'Splash' }]);
 
   const currentRoute = stack[stack.length - 1];
 
   const goBack = useCallback(() => {
     setStack(prev => (prev.length > 1 ? prev.slice(0, -1) : prev));
+  }, []);
+
+  const finishSplash = useCallback(() => {
+    setStack([{ name: 'Welcome' }]);
   }, []);
 
   const resetToHome = useCallback(() => {
@@ -57,6 +63,10 @@ export const MainNavigation: FC = () => {
     return () => subscription.remove();
   }, [goBack, stack.length]);
 
+  if (currentRoute.name === 'Splash') {
+    return <SplashScreen onFinish={finishSplash} />;
+  }
+
   if (currentRoute.name === 'Welcome') {
     return <WelcomeScreen onContinue={resetToHome} />;
   }
@@ -85,4 +95,3 @@ export const MainNavigation: FC = () => {
     <HomeScreen onSelectProduct={openProduct} onOpenCart={openCart} />
   );
 };
-

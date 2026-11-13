@@ -100,3 +100,4 @@ This document covers the **Submission Requirements** outlined in the assignment 
 - **Unfinished / Out-of-Scope Items** (intentionally deferred per assignment guidelines):
   - Live Shopify credit card payment processing (mocked checkout modal displays production redirect URL flow per instructions).
   - Physical 3-minute video recording (complete script provided above for live demo or video walkthrough).
+
