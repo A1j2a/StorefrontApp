@@ -1,118 +1,62 @@
 import React, { FC, useEffect, useRef } from 'react';
-import {
-  Animated,
-  Image,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { AppIcon, SplashVideo } from '../../assets';
-import { useStore } from '../../context/StoreContext';
+import { StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import Video from 'react-native-video';
+import { SplashVideo } from '../../assets';
 import { styles } from './styles';
 
 interface SplashScreenProps {
   onFinish: () => void;
 }
 
+// Fullscreen splash screen playing intro video without overlay icon
 const SplashScreen: FC<SplashScreenProps> = ({ onFinish }) => {
-  const { storeConfig } = useStore();
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(0.92)).current;
-  const progressAnim = useRef(new Animated.Value(0)).current;
+  const isFinishedRef = useRef(false);
+
+  // Trigger completion once and avoid duplicate transitions
+  const handleFinish = () => {
+    if (!isFinishedRef.current) {
+      isFinishedRef.current = true;
+      onFinish();
+    }
+  };
 
   useEffect(() => {
-    // Reference SplashVideo asset for video player support
-    if (!SplashVideo) {
-      return;
-    }
-    let isMounted = true;
-
-    // Fade and scale in smoothly
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 600,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        friction: 7,
-        tension: 40,
-        useNativeDriver: true,
-      }),
-      Animated.timing(progressAnim, {
-        toValue: 1,
-        duration: 2000,
-        useNativeDriver: false,
-      }),
-    ]).start();
-
-    // Auto-advance to Welcome screen after splash animation completes
-    const timer = setTimeout(() => {
-      if (isMounted) {
-        onFinish();
-      }
-    }, 2200);
+    // Fallback safety timeout in case video stalls or fails to report end
+    const safetyTimer = setTimeout(() => {
+      handleFinish();
+    }, 4500);
 
     return () => {
-      isMounted = false;
-      clearTimeout(timer);
+      clearTimeout(safetyTimer);
     };
-  }, [fadeAnim, scaleAnim, progressAnim, onFinish]);
-
-  const progressWidth = progressAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0%', '100%'],
   });
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" />
+
+      {/* Fullscreen splash video playback */}
+      <Video
+        source={SplashVideo}
+        style={styles.videoPlayer}
+        resizeMode="cover"
+        repeat={false}
+        muted={true}
+        playInBackground={false}
+        playWhenInactive={false}
+        ignoreSilentSwitch="ignore"
+        onEnd={handleFinish}
+        onError={handleFinish}
+      />
+
+      {/* Skip button for instant transition */}
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={onFinish}
+        onPress={handleFinish}
         style={styles.skipButton}
         accessibilityLabel="Skip splash screen">
         <Text style={styles.skipText}>SKIP →</Text>
       </TouchableOpacity>
-
-      <Animated.View
-        style={[
-          styles.content,
-          {
-            opacity: fadeAnim,
-            transform: [{ scale: scaleAnim }],
-          },
-        ]}>
-        <View style={styles.iconWrapper}>
-          <Image
-            source={AppIcon}
-            style={styles.appIcon}
-            resizeMode="cover"
-            accessibilityLabel="App Icon"
-          />
-        </View>
-
-        <Text style={styles.storeTitle}>
-          {storeConfig.storeName}
-        </Text>
-        <Text style={styles.storeSub}>
-          {storeConfig.logoSubtext}
-        </Text>
-
-        <View style={styles.progressTrack}>
-          <Animated.View
-            style={[
-              styles.progressFill,
-              styles.progressFillDefault,
-              { width: progressWidth },
-            ]}
-          />
-        </View>
-
-        <Text style={styles.loadingLabel}>
-          LOADING STORE EXPERIENCE
-        </Text>
-      </Animated.View>
     </View>
   );
 };

@@ -48,3 +48,4 @@ export const FilterEmptyState: FC<FilterEmptyStateProps> = ({ onReset }) => {
 };
 
 export default FilterEmptyState;
+

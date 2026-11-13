@@ -287,3 +287,4 @@ export const FilterSortModal: FC<FilterSortModalProps> = ({
 };
 
 export default FilterSortModal;
+

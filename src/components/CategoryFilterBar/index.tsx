@@ -64,3 +64,4 @@ export const CategoryFilterBar: FC<CategoryFilterBarProps> = ({
 };
 
 export default CategoryFilterBar;
+

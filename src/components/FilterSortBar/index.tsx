@@ -109,3 +109,4 @@ export const FilterSortBar: FC<FilterSortBarProps> = ({
 };
 
 export default FilterSortBar;
+
